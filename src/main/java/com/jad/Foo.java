@@ -5,43 +5,58 @@ import java.util.List;
 
 public class Foo {
     private Bar bar;
-    private final List<Baz> bazs = new ArrayList<>();
+    private List<Baz> bazs = new ArrayList<>();
     private Qux qux;
-    private Corge corge;
-    private final List<Grault> graults = new ArrayList<>();
+    private List<Grault> graults = new ArrayList<>();
+    private Corge corge = null;
 
     public Foo(final Bar bar) {
+        this.bar = bar;
+        this.qux = new Qux();
     }
 
     public Bar getBar() {
-        return this.bar;
+        return bar;
     }
 
     public List<Baz> getBazs() {
-        return this.bazs;
-    }
-
-    public Qux getQux() {
-        return this.qux;
+        return bazs;
     }
 
     public void addBaz(final Baz baz) {
-        this.bazs.add(baz);
+        bazs.add(baz);
+    }
+
+    public Qux getQux() {
+        return qux;
     }
 
     public List<Grault> getGraults() {
-        return this.graults;
+       return graults;
     }
 
     public void addGrault() {
-        this.graults.add(new Grault(this));
+        graults.add(new Grault(this));
     }
 
     public Corge getCorge() {
-        return this.corge;
+        return corge;
     }
 
     public void setCorge(final Corge firstCorge) {
+        if (this.corge == firstCorge) {
+            return;
+        }
+
+        if (this.corge != null) {
+            Corge oldCorge = this.corge;
+            this.corge = null;
+            oldCorge.setFoo(null);
+        }
+
         this.corge = firstCorge;
+        if (firstCorge != null && firstCorge.getFoo() != this) {
+            firstCorge.setFoo(this);
+        }
     }
 }
